@@ -1,14 +1,26 @@
+import {withRouter, Redirect} from 'react-router-dom'
+import Cookies from 'js-cookie'
 import Headers from '../Header'
 
-const Home = () => {
-  const x = 1
+const Home = props => {
+  const jwtToken = Cookies.get('jwt_token')
+  if (jwtToken === undefined) {
+    return <Redirect to="/login" />
+  }
+
+  const logout = () => {
+    Cookies.remove('jwt_token')
+    const {history} = props
+    history.replace('/login')
+  }
+
   return (
     <div>
       <Headers />
       <h1>Home Route</h1>
-      <button>Logout</button>
+      <button onClick={logout}>Logout</button>
     </div>
   )
 }
 
-export default Home
+export default withRouter(Home)
